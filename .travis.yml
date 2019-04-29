@@ -1,0 +1,17 @@
+language: vba
+install:
+  - composer install
+  - sudo apt-get install -qq mono-complete
+script:
+  - vendor/bin/phpcs --extensions=cls/vba,bas/vba --standard=vendor/beakerboy/vba_tokenizer/src/Standards/VBA $TRAVIS_BUILD_DIR/src
+deploy:
+  - provider: script
+    script: bash deploy.sh
+    on:
+      tags: true
+  - provider: pages
+    skip_cleanup: true
+    local_dir: $TRAVIS_BUILD_DIR/docs
+    github_token: $GH_REPO_TOKEN
+    on:
+      tags: true
